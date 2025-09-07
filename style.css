@@ -1,0 +1,23 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #222;
+  background: #f6f7fb;
+}
+.container {
+  max-width: 720px; margin: 24px auto; padding: 16px; background: #fff; border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+h1 { margin: 0 0 12px; font-size: 22px; }
+#quiz { margin-top: 12px; }
+.question { font-weight: 600; margin-bottom: 12px; }
+.answers { display: grid; gap: 8px; }
+.answer {
+  padding: 12px; border: 1px solid #e6e6e6; border-radius: 8px; cursor: pointer;
+}
+.answer.selected { border-color: #2563eb; background: #eff6ff; }
+#controls { display: flex; gap: 8px; margin-top: 16px; }
+button { padding: 10px 14px; border: 0; border-radius: 8px; cursor: pointer; background: #e9ecef; }
+button.primary { background: #2563eb; color: #fff; }
+.hidden { display: none; }
+#result { margin-top: 16px; font-weight: 700; }
+button.share { margin-top: 12px; background: #10b981; color: #fff; } 
