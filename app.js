@@ -1,12 +1,13 @@
+
 const questions = [
   {
     q: 'Какова оптимальная температура воды для эспрессо?',
-    a: ['80-85°C', '86-89°C', '90-96°C', '97-100°C'],
+    a: ['80-85C', '86-89C', '90-96C', '97-100C'],
     correct: 2
   },
   {
     q: 'До какой температуры взбивают молоко для латте?',
-    a: ['45-50°C', '55-60°C', '60-65°C', '70-75°C'],
+    a: ['45-50C', '55-60C', '60-65C', '70-75C'],
     correct: 2
   },
   {
@@ -32,7 +33,7 @@ function render() {
 
   const qEl = document.createElement('div');
   qEl.className = 'question';
-  qEl.textContent = `${current + 1}. ${q.q}`;
+  qEl.textContent = ${current + 1}. ;
   quiz.appendChild(qEl);
 
   const list = document.createElement('div');
@@ -63,25 +64,26 @@ nextBtn.onclick = () => {
 finishBtn.onclick = () => {
   const score = selections.reduce((acc, sel, i) => acc + (sel === questions[i].correct ? 1 : 0), 0);
   result.classList.remove('hidden');
-  result.textContent = `Ваш результат: ${score} из ${questions.length}`;
+  result.textContent = Ваш результат:  из ;
   shareBtn.classList.remove('hidden');
 
-  // Telegram Games score API — работает при интеграции через Bot API
-  try {
-    if (typeof TelegramGameProxy !== 'undefined') {
-      TelegramGameProxy.shareScore(score);
-    }
-  } catch (e) {}
+  // Отправляем результат в Telegram Web App
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.sendData(JSON.stringify({
+      score: score,
+      total: questions.length,
+      answers: selections
+    }));
+  }
 };
 
 shareBtn.onclick = () => {
-  // Запасной вариант: поделиться через navigator.share
   const score = (result.textContent.match(/(\d+) из/) || [])[1] || '';
   if (navigator.share) {
-    navigator.share({ title: 'Тест стажера', text: `Мой результат: ${score}` });
+    navigator.share({ title: 'Тест стажера', text: Мой результат:  });
   } else {
     alert('Скопируйте результат и отправьте в чат.');
   }
 };
 
-render(); 
+render();
