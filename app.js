@@ -1,13 +1,12 @@
-
 const questions = [
   {
     q: 'Какова оптимальная температура воды для эспрессо?',
-    a: ['80-85C', '86-89C', '90-96C', '97-100C'],
+    a: ['80-85°C', '86-89°C', '90-96°C', '97-100°C'],
     correct: 2
   },
   {
     q: 'До какой температуры взбивают молоко для латте?',
-    a: ['45-50C', '55-60C', '60-65C', '70-75C'],
+    a: ['45-50°C', '55-60°C', '60-65°C', '70-75°C'],
     correct: 2
   },
   {
@@ -25,7 +24,6 @@ const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 const finishBtn = document.getElementById('finish');
 const result = document.getElementById('result');
-const shareBtn = document.getElementById('share');
 
 function render() {
   const q = questions[current];
@@ -33,7 +31,7 @@ function render() {
 
   const qEl = document.createElement('div');
   qEl.className = 'question';
-  qEl.textContent = ${current + 1}. ;
+  qEl.textContent = `${current + 1}. ${q.q}`; 
   quiz.appendChild(qEl);
 
   const list = document.createElement('div');
@@ -56,35 +54,70 @@ function render() {
 }
 
 prevBtn.onclick = () => {
-  if (current > 0) { current--; render(); }
+  if (current > 0) {
+    current--;
+    render();
+  }
 };
+
 nextBtn.onclick = () => {
-  if (current < questions.length - 1) { current++; render(); }
+  if (selections[current] === null) {
+    alert('Пожалуйста, выберите ответ перед тем, как продолжить.');
+    return;
+  }
+  if (current < questions.length - 1) {
+    current++;
+    render();
+  }
 };
+
 finishBtn.onclick = () => {
+  if (selections.includes(null)) {
+    alert('Пожалуйста, ответьте на все вопросы перед завершением.');
+    return;
+  }
+
   const score = selections.reduce((acc, sel, i) => acc + (sel === questions[i].correct ? 1 : 0), 0);
-  result.classList.remove('hidden');
-  result.textContent = Ваш результат:  из ;
-  shareBtn.classList.remove('hidden');
+  result.className = ''; // Убираем hidden
+  result.textContent = `Ваш результат: ${score} из ${questions.length}`; 
+
+  prevBtn.style.display = 'none';
+  nextBtn.style.display = 'none';
+  finishBtn.style.display = 'none';
+
+  // Добавляем кнопку "Начать заново"
+  const restartBtn = document.createElement('button');
+  restartBtn.className = 'primary';
+  restartBtn.textContent = 'Начать заново';
+  restartBtn.onclick = () => {
+    current = 0;
+    selections.fill(null);
+    result.textContent = '';
+    result.className = 'hidden';
+    render();
+  };
+  document.getElementById('controls').appendChild(restartBtn);
 
   // Отправляем результат в Telegram Web App
   if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.ready();
     window.Telegram.WebApp.sendData(JSON.stringify({
       score: score,
       total: questions.length,
       answers: selections
     }));
-  }
-};
-
-shareBtn.onclick = () => {
-  const score = (result.textContent.match(/(\d+) из/) || [])[1] || '';
-  if (navigator.share) {
-    navigator.share({ title: 'Тест стажера', text: Мой результат:  });
+    // Закрываем Web App через 2 секунды
+    setTimeout(() => {
+      window.Telegram.WebApp.close();
+    }, 2000);
   } else {
-    alert('Скопируйте результат и отправьте в чат.');
+    console.warn('Telegram Web App недоступен.');
+    alert('Результаты сохранены. Вернитесь в Telegram.');
   }
 };
 
+// Инициализация Telegram Web App
+if (window.Telegram && window.Telegram.WebApp) {
+  window.Telegram.WebApp.ready();
+}
 render();
-
