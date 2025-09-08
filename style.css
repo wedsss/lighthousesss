@@ -20,4 +20,3 @@ button { padding: 10px 14px; border: 0; border-radius: 8px; cursor: pointer; bac
 button.primary { background: #2563eb; color: #fff; }
 .hidden { display: none; }
 #result { margin-top: 16px; font-weight: 700; }
-button.share { margin-top: 12px; background: #10b981; color: #fff; } 
