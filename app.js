@@ -31,7 +31,7 @@ function render() {
 
   const qEl = document.createElement('div');
   qEl.className = 'question';
-  qEl.textContent = `${current + 1}. ${q.q}`; 
+  qEl.textContent = `${current + 1}. ${q.q}`;
   quiz.appendChild(qEl);
 
   const list = document.createElement('div');
@@ -78,14 +78,13 @@ finishBtn.onclick = () => {
   }
 
   const score = selections.reduce((acc, sel, i) => acc + (sel === questions[i].correct ? 1 : 0), 0);
-  result.className = ''; // Убираем hidden
-  result.textContent = `Ваш результат: ${score} из ${questions.length}`; 
+  result.className = '';
+  result.textContent = `Ваш результат: ${score} из ${questions.length}`;
 
   prevBtn.style.display = 'none';
   nextBtn.style.display = 'none';
   finishBtn.style.display = 'none';
 
-  // Добавляем кнопку "Начать заново"
   const restartBtn = document.createElement('button');
   restartBtn.className = 'primary';
   restartBtn.textContent = 'Начать заново';
@@ -98,7 +97,6 @@ finishBtn.onclick = () => {
   };
   document.getElementById('controls').appendChild(restartBtn);
 
-  // Отправляем результат в Telegram Web App
   if (window.Telegram && window.Telegram.WebApp) {
     window.Telegram.WebApp.ready();
     window.Telegram.WebApp.sendData(JSON.stringify({
@@ -106,7 +104,6 @@ finishBtn.onclick = () => {
       total: questions.length,
       answers: selections
     }));
-    // Закрываем Web App через 2 секунды
     setTimeout(() => {
       window.Telegram.WebApp.close();
     }, 2000);
@@ -116,7 +113,6 @@ finishBtn.onclick = () => {
   }
 };
 
-// Инициализация Telegram Web App
 if (window.Telegram && window.Telegram.WebApp) {
   window.Telegram.WebApp.ready();
 }
